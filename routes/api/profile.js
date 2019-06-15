@@ -2,7 +2,7 @@ const express  = require("express");
 const router   = express.Router();
 // Importar models
 const Profile  = require("../../models/Profile");
-const User     = require("../../models/Profile");
+const User     = require("../../models/Users");
 // Importar middleware
 const auth     = require("../../middleware/auth");
 // IMporta a biblioteca para validação do input dos profiles
@@ -27,9 +27,8 @@ router.get("/", (request, response)=>{
 router.get("/me", auth, async (request, response)=>{
 
     try {
-        const profile = Profile.findOne({ user: request.user.id })
-                                        .populate('user',[name, avatar]);// request.user.id se torna disponível pelo uso do middelware
-        
+        const profile = await Profile.findOne({ user: request.user.id })// request.user.id se torna disponível pelo uso do middelware
+                                        .populate('user',['name','avatar']);//cuidado aqui 'user' é a chave estrangeira que na model deve apontar corretamente para o nome da collection
         if (! profile)
         {
             return response.status(400).json({msg: "No profile found for this user" });
@@ -40,12 +39,9 @@ router.get("/me", auth, async (request, response)=>{
     } catch (error) {
 
         console.error(error.message);
-        return response.status(500).send("Server Error for Profile Retrieval");
+        return response.status(500).send("No profile found for this user");
         
-    }
-
-
-    
+    } 
 });
 
 //@route    POST api/profile
@@ -80,11 +76,11 @@ async (request, response)=>{
       twitter,
       instagram,
       linkedin
-    } = req.body;
+    } = request.body;
 
     // Build profile object
     const profileFields = {};
-    profileFields.user = req.user.id;
+    profileFields.user = request.user.id;
     if (company) profileFields.company = company;
     if (website) profileFields.website = website;
     if (location) profileFields.location = location;
@@ -102,6 +98,38 @@ async (request, response)=>{
     if (facebook) profileFields.social.facebook = facebook;
     if (linkedin) profileFields.social.linkedin = linkedin;
     if (instagram) profileFields.social.instagram = instagram;
+
+
+    try {
+
+        let profile = await Profile.findOne({user: request.user.id});
+
+        if (profile)
+        {
+            // Update
+            profile = await Profile.findOneAndUpdate(
+                {user: request.user.id},
+                {$set: profileFields},
+                {new: true}
+            );
+
+            profile = await Profile.findOne({user: request.user.id}).populate('user',['name','avatar']);
+
+           return response.json(profile);// para parar aqui
+        }
+
+        // create
+
+        profile = new Profile(profileFields);
+
+        await profile.save(profile);
+
+        response.json(profile);
+        
+    } catch (error) {
+        console.error(error.message);
+        response.status(500).json({msg: "Erro no cadastro do profile"});
+    }
 });
 
 

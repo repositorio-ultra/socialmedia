@@ -85,7 +85,7 @@ router.post("/",[
                         //  enviando como parâmetros:
                         //  payload, uma senha, objeto com parâmetros como expire e por último a definicao do call back
                         //  nao uso await, porque vai chamar o call back
-                        let expiresIn = 3600; // uma hora para expirar o token
+                        let expiresIn = 3600*1000; // uma hora para expirar o token
                         jwt.sign(payload, config.get("senha_para_gerar_token"),{expiresIn},(err,token)=>{
                             if (err) throw err;
                             response.json({ token });
