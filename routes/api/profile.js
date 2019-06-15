@@ -9,11 +9,25 @@ const auth     = require("../../middleware/auth");
 const {check, validationResult} = require ("express-validator/check");
 
 //@route    GET api/profile
-//@desc     Rota de teste
+//@desc     Listar os profiles
 //@access   Public
 
-router.get("/", (request, response)=>{
-    response.send("api/profile");
+router.get("/", async (request, response)=>{
+    
+    try {
+        let profile = await Profile.find().populate('user',['name', 'avatar']);
+
+        if(profile)
+        {
+            return response.json(profile);
+        }
+        
+        response.json({msg: "Nenhum profile encontrado"});
+
+    } catch (error) {
+        console.log(error.message);
+        response.status(500).send("Erro de servidor, na obtençao dos profiles"); 
+    }
 });
 
 
