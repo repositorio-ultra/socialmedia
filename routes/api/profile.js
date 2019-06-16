@@ -22,11 +22,38 @@ router.get("/", async (request, response)=>{
             return response.json(profile);
         }
         
-        response.json({msg: "Nenhum profile encontrado"});
+        response.status(400).json({msg: "Nenhum profile encontrado"});
 
     } catch (error) {
         console.log(error.message);
         response.status(500).send("Erro de servidor, na obtençao dos profiles"); 
+    }
+});
+
+//@route    GET api/profile/user/:id
+//@desc     Listar o profile de um usuário específico
+//@access   Public
+
+router.get("/user/:userid", async (request, response)=>{
+    
+    try {
+        let profile = await Profile.findOne({user: request.params.userid }).populate('user',['name', 'avatar']);
+
+        if(profile)
+        {
+            return response.json(profile);
+        }
+        
+        response.status(400).json({msg: "Nenhum profile deste usuário encontrado"});
+
+    } catch (error) {
+        console.log(error.message);
+        // Caso o tipo de erro seja do id do usuário num formato inválido
+        if (error.kind == 'Object')
+        {
+           return response.status(400).json({msg: "Profile não encontrado"}); 
+        }
+        response.status(500).send("Erro de servidor, na obtençao do profile"); 
     }
 });
 
