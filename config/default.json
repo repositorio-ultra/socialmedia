@@ -1,4 +1,6 @@
 {
     "mongoURI" : "mongodb+srv://ricvsweb-social:pQ73Z8Bp8AmCQzGO@cluster0-98gth.gcp.mongodb.net/social?retryWrites=true&w=majority",
-    "senha_para_gerar_token": "SecretSenha"
+    "senha_para_gerar_token": "SecretSenha",
+    "githubclientid": "c9f61811da1d8a653e6b",
+    "githubpassword": "8acb357937e394a6efe246af8bb4cd749e92f41a"
 }

@@ -7,6 +7,9 @@ const User     = require("../../models/Users");
 const auth     = require("../../middleware/auth");
 // IMporta a biblioteca para validação do input dos profiles
 const {check, validationResult} = require ("express-validator/check");
+// Importar a biblioteca para requisiçõe a APIs externas
+const requestapi  = require("request");
+const config   = require("config");
 
 //@route    GET api/profile
 //@desc     Listar os profiles
@@ -173,6 +176,269 @@ async (request, response)=>{
     }
 });
 
+//@route    DELETE api/profile
+//@desc     Deletar profile, posts e usuário
+//@access   Private
 
+router.delete("/",auth, async (request, response)=>{
+    
+    try {
+            //remover o profile    
+            await Profile.findOneAndRemove({ user : request.user.id});
+
+            //remover o usuário   
+            await User.findOneAndRemove({ _id : request.user.id});
+
+            response.json({ msg: "Usuário e perfil deletados"}); 
+
+    } catch (error) {
+        console.log(error.message);
+        response.status(500).send("Erro de servidor"); 
+    }
+});
+
+//@route    PUT api/profile/experience
+//@desc     Atualiza o profile, inserindo uma experiência
+//@access   Private
+
+router.put("/experience",[
+    auth,
+    [
+      check('title', 'Title is required')
+        .not()
+        .isEmpty(),
+      check('company', 'Company is required')
+        .not()
+        .isEmpty(),
+      check('from', 'From date is required')
+        .not()
+        .isEmpty()
+    ]
+  ], async (request, response)=>{
+    
+    try {
+            
+            const errors = validationResult(request);
+            
+            if (! errors.isEmpty())
+            {
+                return response.status(401).json({errors: errors.array()});
+            }
+            
+            // Busca o perfil do usuário
+            const profile =  await Profile.findOne({user: request.user.id});
+            console.log(profile);
+
+            // Obtem os dados do formulário e Monta o Objeto com a nova experiência
+            const {
+                title,
+                company,
+                location,
+                from,
+                to,
+                current,
+                description
+              } = request.body;
+          
+              const newExp = {
+                title,
+                company,
+                location,
+                from,
+                to,
+                current,
+                description
+              };
+
+            // insere no início objeto experience do objeto profile
+            profile.experience.unshift(newExp);
+
+            // salva o objeto no banco
+            profile.save();
+
+            // Devolve o profile novo cadastrado
+            response.json(profile); 
+
+    } catch (error) {
+        console.log(error.message);
+        response.status(500).send("Erro de servidor"); 
+    }
+});
+
+//@route    DELETE api/profile/experience/:exp_id
+//@desc     Deletar uma experiencia do profile
+//@access   Private
+
+router.delete("/experience/:exp_id",auth, async (request, response)=>{
+    
+    try {
+            //obter o profile   
+            const profile = await Profile.findOne({ user : request.user.id });
+
+            //mapear as experiencias no profile  
+            const indexToRemove = profile.experience.map(item => item.id).indexOf(request.params.exp_id);
+            //console.log(profile.experience.map(item => item.id));// Traz um array com os ids das experiencies
+            //console.log("request "+ request.params.exp_id);
+
+            // remover a experience do objeto informando o index do objeto e a quantidade de objetos para remover como params
+            profile.experience.splice(indexToRemove, 1);
+
+            // salva o profile
+            await profile.save();
+
+            // retorna o profile para a view;
+
+            response.json(profile); 
+
+    } catch (error) {
+        console.log(error.message);
+        response.status(500).send("Erro de servidor"); 
+    }
+});
+
+//@route    PUT api/profile/education
+//@desc     Atualiza o profile, inserindo uma formação acadêmica
+//@access   Private
+
+router.put("/education",[
+    auth,
+    [
+      check('school', 'School is required')
+        .not()
+        .isEmpty(),
+      check('degree', 'Degree is required')
+        .not()
+        .isEmpty(),
+      check('fieldofstudy', 'Field of study is required')
+        .not()
+        .isEmpty(),
+    check('from', 'From date is required')
+        .not()
+        .isEmpty()
+    ]
+  ], async (request, response)=>{
+    
+    try {
+            
+            const errors = validationResult(request);
+            
+            if (! errors.isEmpty())
+            {
+                return response.status(401).json({errors: errors.array()});
+            }
+            
+            // Busca o perfil do usuário
+            const profile =  await Profile.findOne({user: request.user.id});
+            //console.log(profile);
+
+            // Obtem os dados do formulário e Monta o Objeto com a nova experiência
+            const {
+                school,
+                degree,
+                fieldofstudy,
+                from,
+                to,
+                current,
+                description
+              } = request.body;
+          
+              const newEdu = {
+                school,
+                degree,
+                fieldofstudy,
+                from,
+                to,
+                current,
+                description
+              };
+
+            // insere no início objeto education do objeto profile
+            profile.education.unshift(newEdu);
+
+            // salva o objeto no banco
+            profile.save();
+
+            // Devolve o profile novo cadastrado
+            response.json(profile); 
+
+    } catch (error) {
+        console.log(error.message);
+        response.status(500).send("Erro de servidor"); 
+    }
+});
+
+//@route    DELETE api/profile/education/:edu_id
+//@desc     Deletar uma experiencia do profile
+//@access   Private
+
+router.delete("/education/:edu_id",auth, async (request, response)=>{
+    
+    try {
+            //obter o profile   
+            const profile = await Profile.findOne({ user : request.user.id });
+
+            //mapear as experiencias no profile  
+            const indexToRemove = profile.education.map(item => item.id).indexOf(request.params.edu_id);
+            //console.log(profile.education.map(item => item.id));// Traz um array com os ids das experiencies
+            //console.log("request "+ request.params.exp_id);
+
+            // remover a education do objeto informando o index do objeto e a quantidade de objetos para remover como params
+            if ( indexToRemove != -1)
+            {
+                profile.education.splice(indexToRemove, 1);
+
+            }
+
+            // salva o profile
+            await profile.save();
+
+            // retorna o profile para a view;
+
+            response.json(profile); 
+
+    } catch (error) {
+        console.log(error.message);
+        response.status(500).send("Erro de servidor"); 
+    }
+});
+
+//@route    GET api/profile/github/:username
+//@desc     Acessar os dados do repositório do usuário no GitHub
+//@access   Public
+
+
+router.get("/github/:username", (request, response)=>{
+
+    try {
+
+        const options = {
+            uri: `https://api.github.com/users/${request.params.username}/repos?per_page=5&sort=created:asc&client_id=${config.get('githubclientid')}&client_secret=${config.get('githubpassword')}`,
+            method: 'GET',
+            headers: {'user-agent':  'nodejs'}
+        }
+        
+        requestapi(options,(error, responseapi, body)=>{
+
+            if(error) console.log(error);
+
+            if(responseapi.statusCode !== 200)
+            {
+               return response.status(404).json({ msg : "Repos not found"});
+            }
+            else
+            {
+                response.json(JSON.parse(body));
+            }
+
+        });
+     
+
+    } catch (error) {
+
+        console.error(error.message);
+        return response.status(500).send("No repo found for this user");
+        
+    } 
+});
 
 module.exports = router;
