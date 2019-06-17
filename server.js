@@ -13,15 +13,15 @@ app.get("/", (request,response)=>{
     response.send("API running...");
 })
 
-//Middlewares
+// Middlewares
 // Não é mais necessário importar o módulo body-parser, pois já está incluso no express
-app.use(express.json()); //Este módulo permite que eu lei as variáveis de formulário postadas
+app.use(express.json()); //Este módulo permite que eu leia as variáveis de formulário postadas
 
 // Other routes
-const users = require ("./routes/api/users");
+const users   = require ("./routes/api/users");
 const profile = require ("./routes/api/profile");
-const auth = require ("./routes/api/auth");
-const posts = require ("./routes/api/posts");
+const auth    = require ("./routes/api/auth");
+const posts   = require ("./routes/api/posts");
 
 // Use routes
 app.use("/api/users", users);
