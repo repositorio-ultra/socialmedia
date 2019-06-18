@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch} from "react-router-dom"
 import Navbar from './components/layout/Navbar'
@@ -10,6 +10,43 @@ import { Provider } from 'react-redux'
 import store from './store'
 /* end of REDUX imports */
 import Alert from './components/layout/Alert'
+/* para verificar se o usuário está autenticado */
+import { loadUser } from  './actions/auth'
+import setAuthToken from './utils/setAuthToken'
+
+if (localStorage.token)
+{
+    setAuthToken(localStorage.token);
+}
+
+const App = ()=> {
+/* use Effect fica executando o metodo do store.dispatch em loop a não ser que se use um [] como segundo parâmetro */
+  useEffect(()=>{
+    store.dispatch(loadUser());
+  }, []);
+  return  (<Provider store={store}>
+      <Router>
+        <Fragment >
+          <Navbar />
+          <Route exact path="/"  component={ Landing } />
+          <section className="container">
+            <Alert />
+            <Switch>
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+            </Switch>
+          </section>
+        </Fragment>
+      </Router>
+      </Provider>)
+
+}
+
+export default App;
+
+
+
+
 
 // function App() {
 //   return (
@@ -35,22 +72,3 @@ import Alert from './components/layout/Alert'
 
 // Mudamos tudo para arrow functions, que ao trazer somente uma linha de retorno pode omitir a palavra return
 // removemos a div, para utilizar um Fragment, que é uma div fantasma -  a tag div não aparece no html renderizado
-
-const App = ()=>
-<Provider store={store}>
-  <Router>
-    <Fragment >
-      <Navbar />
-      <Route exact path="/"  component={ Landing } />
-      <section className="container">
-        <Alert />
-        <Switch>
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/login" component={Login} />
-        </Switch>
-      </section>
-    </Fragment>
-  </Router>
-  </Provider>
-
-export default App;

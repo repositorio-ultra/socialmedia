@@ -77,7 +77,7 @@ async (request, response)=>{
 
             if (! isMatch )
             {
-                return response.status(401).json({msg: "Invalid credentials"});
+                return response.status(401).json({errors:[{msg:"Invalid credentials"}] });
             }
 
 
@@ -95,14 +95,14 @@ async (request, response)=>{
         }
         else
         {
-            return response.status(401).json({msg: "Invalid credentials"});  
+            return response.status(401).json({errors:[{msg:"Invalid credentials"}] });  
         }
 
 
            
     } catch (error) {
         console.error(error);
-        return response.status(401).json({msg: "Invalid credentials"});
+        return response.status(401).json({errors: "Invalid credentials"});
         
     }
     
