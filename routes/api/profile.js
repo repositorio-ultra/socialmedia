@@ -71,8 +71,8 @@ router.get("/user/:userid", async (request, response)=>{
 router.get("/me", auth, async (request, response)=>{
 
     try {
-        const profile = await Profile.findOne({ user: request.user.id })// request.user.id se torna disponível pelo uso do middelware
-                                        .populate('user',['name','avatar']);//cuidado aqui 'user' é a chave estrangeira que na model deve apontar corretamente para o nome da collection
+        const profile = await Profile.findOne({ user: request.user.id });// request.user.id se torna disponível pelo uso do middelware
+                                        //.populate('user',['name','avatar']);//cuidado aqui 'user' é a chave estrangeira que na model deve apontar corretamente para o nome da collection
         if (! profile)
         {
             return response.status(400).json({msg: "No profile found for this user" });

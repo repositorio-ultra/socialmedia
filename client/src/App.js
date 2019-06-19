@@ -4,7 +4,10 @@ import { BrowserRouter as Router, Route, Switch} from "react-router-dom"
 import Navbar from './components/layout/Navbar'
 import Landing from './components/layout/Landing'
 import Login from './components/auth/Login'
+import Dashboard from './components/dashboard/Dashboard'
+import PrivateRoute from './components/routing/PrivateRoute'
 import Register from './components/auth/Register'
+import CreateProfile from './components/profile-forms/CreateProfile'
 /* Imports to user REDUX - a biblioteca que junta o react com o redux  */
 import { Provider } from 'react-redux'
 import store from './store'
@@ -33,6 +36,8 @@ const App = ()=> {
             <Alert />
             <Switch>
               <Route exact path="/register" component={Register} />
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/create-profile" component={CreateProfile} />
               <Route exact path="/login" component={Login} />
             </Switch>
           </section>

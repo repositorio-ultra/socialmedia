@@ -32,7 +32,7 @@ const Login = ({login, isAuthenticated}) => {
     </p>
     <form className='form' onSubmit={e=>onSubmit(e)}>
         <div className='form-group'>
-            <input type='email' placeholder='Email Address' name='email'  value={email} onChange={ e=>onChange(e)} />
+            <input type='email' placeholder='Email Address' name='email'  value={email} onChange={ e=>onChange(e)} autocomple="off"/>
         </div>
         <div className='form-group'>
             <input
@@ -42,6 +42,7 @@ const Login = ({login, isAuthenticated}) => {
                 value={password}
                 onChange={ e=>onChange(e)}
                 minLength='6'
+                autocomple="off"
             />
         </div>
         <input type='submit' className='btn btn-primary' value='Login' />
