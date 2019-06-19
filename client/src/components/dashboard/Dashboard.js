@@ -17,6 +17,7 @@ import { getCurrentProfile } from '../../actions/profile'
 import Spinner from '../layout/Spinner'
 import DashboardActions from './DashboardActions'
 import Experience from './Experience'
+import Education from './Education'
 
 /* no lugar do props, desestruturamos para usar somente o getCurrentProfile, auth e profile */
 
@@ -36,6 +37,7 @@ const Dashboard = ({getCurrentProfile,auth:{ user },profile:{profile,loading}}) 
                  <Fragment>
                      <DashboardActions />
                      <Experience experience={profile.experience}/>
+                     <Education education={profile.education}/>
                 </Fragment>)
                  
                  : 

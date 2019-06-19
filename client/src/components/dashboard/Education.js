@@ -7,20 +7,19 @@ const Education= ({education}) => {
 
     const educations = education.map( edu => (
         <Fragment>
-        <td>{edu._id}</td>
-        <td>{edu.company}</td>
-        <td className="hide-sm">{edu.title}</td>
+        <tr>
+        <td>{edu.school}</td>
+        <td className="hide-sm">{edu.degree}</td>
         <td>
             <Moment format='YYYY/MM/DD'>
             {edu.from}
             </Moment> { ' - ' }
-            { edu.to === null ? (' Now ') : (<Moment format="YYYY/MM/DD"> {edu.to}</Moment>)}
+            { edu.to === null ? (' Now ') : (<Moment format="YYYY/MM/DD">{edu.to}</Moment>)}
         </td>
         <td>
             <button className='btn btn-danger'>Delete</button>
         </td>
         </tr>
-        <h1>{edu.to}</h1>
         </Fragment>
     ))
     return (

@@ -162,3 +162,14 @@ export const createProfile = (
 
   }
 
+  // Delete Experiences
+
+  export const DeleteExperience = (id) => async dispatch => {
+    try {
+      const res = await axios.delete(`/api/profile/experience/${id}`)
+      
+    } catch (err) {
+      
+    }
+  }
+
