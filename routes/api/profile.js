@@ -132,7 +132,9 @@ async (request, response)=>{
     if (status) profileFields.status = status;
     if (githubusername) profileFields.githubusername = githubusername;
     if (skills) {
-      profileFields.skills = skills.split(',').map(skill => skill.trim());
+        let skills2 = skills.toString();
+        //console.log("Habilidades " + skills2);
+        profileFields.skills = skills2.split(',').map(skill => skill.trim());
     }
 
     // Build social object

@@ -1,4 +1,4 @@
-/*
+ /*
  A estrutura inicial é criada com o atalho rafp que já importa o PropType
  Precisamos na sequência importar o connect da lib react-redux. Ele faz a conexão entre o componente e o reducer
 
@@ -15,6 +15,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getCurrentProfile } from '../../actions/profile'
 import Spinner from '../layout/Spinner'
+import DashboardActions from './DashboardActions'
+import Experience from './Experience'
 
 /* no lugar do props, desestruturamos para usar somente o getCurrentProfile, auth e profile */
 
@@ -30,9 +32,15 @@ const Dashboard = ({getCurrentProfile,auth:{ user },profile:{profile,loading}}) 
                      Dashboard
                  </h1>
                  <p className="lead"><i className="fas fa-user"></i>{'  '} Welcome,{ user && user.user.name } </p>
-                 {profile !== null ? <Fragment>has</Fragment> : 
+                 {profile !== null ? (
                  <Fragment>
-                     <p>Your don't have a profile registered yet</p>
+                     <DashboardActions />
+                     <Experience experience={profile.experience}/>
+                </Fragment>)
+                 
+                 : 
+                 <Fragment>
+                     <p>You don't have a profile registered yet</p>
                      <Link to='/create-profile'><div className="btn btn-primary">Add Profile</div></Link>
                      
                  </Fragment>}

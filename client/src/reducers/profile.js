@@ -12,7 +12,7 @@ o tipo e o payload - que são os dados -
 os valores recebidos no action.payload
 
 */
-import { GET_PROFILE,PROFILE_ERROR, CLEAR_PROFILE } from '../actions/types'
+import { GET_PROFILE,PROFILE_ERROR, CLEAR_PROFILE, UPDATE_PROFILE } from '../actions/types'
 
 
 const initialState = {
@@ -31,12 +31,12 @@ export default function (state = initialState, action){
            no PROFILE_ERROR o payload traz as mensagens de erro e status
         */
         case GET_PROFILE:
+        case UPDATE_PROFILE:
             return{
                 ...state,
                 profile: action.payload,
                 loading: false
             }
-
         
         case PROFILE_ERROR:
                 return{
