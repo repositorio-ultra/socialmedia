@@ -3,6 +3,7 @@ const router   = express.Router();
 // Importar models
 const Profile  = require("../../models/Profile");
 const User     = require("../../models/Users");
+const Post     = require("../../models/Posts");
 // Importar middleware
 const auth     = require("../../middleware/auth");
 // IMporta a biblioteca para validação do input dos profiles
@@ -185,6 +186,9 @@ async (request, response)=>{
 router.delete("/",auth, async (request, response)=>{
     
     try {
+            //remover os posts   
+            await Post.deleteMany({ user : request.user.id});
+
             //remover o profile    
             await Profile.findOneAndRemove({ user : request.user.id});
 

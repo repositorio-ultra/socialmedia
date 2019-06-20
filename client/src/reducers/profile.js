@@ -12,7 +12,7 @@ o tipo e o payload - que são os dados -
 os valores recebidos no action.payload
 
 */
-import { GET_PROFILE,PROFILE_ERROR, CLEAR_PROFILE, UPDATE_PROFILE } from '../actions/types'
+import { GET_PROFILE,PROFILE_ERROR, CLEAR_PROFILE, UPDATE_PROFILE, GET_PROFILES, GET_REPOS } from '../actions/types'
 
 
 const initialState = {
@@ -25,11 +25,12 @@ const initialState = {
 
 export default function (state = initialState, action){
 
+    /* no GET_PROFILE o action.payload traz o perfil e setamos o loading para false porque conclui a consulta a banco
+    no PROFILE_ERROR o payload traz as mensagens de erro e status */
+
+
     switch (action.type)
     {
-        /* no GET_PROFILE o action.payload traz o perfil e setamos o loading para false porque conclui a consulta a banco
-           no PROFILE_ERROR o payload traz as mensagens de erro e status
-        */
         case GET_PROFILE:
         case UPDATE_PROFILE:
             return{
@@ -37,6 +38,13 @@ export default function (state = initialState, action){
                 profile: action.payload,
                 loading: false
             }
+            
+        case GET_PROFILES:
+                return{
+                    ...state,
+                    profiles: action.payload,
+                    loading: false
+                }
         
         case PROFILE_ERROR:
                 return{
@@ -52,6 +60,12 @@ export default function (state = initialState, action){
                     profiles:[],
                     repos: [],
                     error: {},
+                    loading: false
+                }
+        case GET_REPOS:
+                return{
+                    ...state,
+                    repos: action.payload,
                     loading: false
                 }
 

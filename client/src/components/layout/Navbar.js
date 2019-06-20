@@ -7,6 +7,9 @@ import { logout } from '../../actions/auth'
 const Navbar = ({auth: {isAuthenticated, loading}, logout}) => {
   const logado = (
     <ul>
+    <li><Link to="/profiles">
+        Developers</Link>
+    </li>
     <li><Link to="/dasboard">
       <i className="fas fa-user"></i>{'  '}
       <span className="hide-sm">Dashboard</span></Link>
@@ -21,7 +24,9 @@ const Navbar = ({auth: {isAuthenticated, loading}, logout}) => {
 
   const naologado = (
     <ul>
-    <li><Link to="#!">Developers</Link></li>
+    <li><Link to="/profiles">
+        Developers</Link>
+    </li>
     <li><Link to="/register">Register</Link></li>
     <li><Link to="/login">Login</Link></li>
   </ul>
