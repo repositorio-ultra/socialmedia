@@ -33,13 +33,13 @@ router.get("/", auth, async(request, response)=>{
         }
         else
         {
-            response.status(501).send("Server error");
+            response.status(500).send("Server error");
         }
 
         
     } catch (error) {
         console.error(error.msg);
-        response.status(501).send("Server error");
+        response.status(500).send("Server error");
         
     }
 });

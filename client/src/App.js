@@ -27,6 +27,8 @@ if (localStorage.token)
     setAuthToken(localStorage.token);
 }
 
+console.log ("Appjs"+ localStorage.token);
+
 const App = ()=> {
 /* use Effect fica executando o metodo do store.dispatch em loop a não ser que se use um [] como segundo parâmetro */
   useEffect(()=>{
@@ -40,6 +42,7 @@ const App = ()=> {
           <section className="container">
             <Alert />
             <Switch>
+             <Route exact path="/navbar" component={Navbar} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/profiles" component={Profiles} />
               <Route exact path="/profile/:id" component={Profile} />
