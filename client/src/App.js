@@ -27,8 +27,6 @@ if (localStorage.token)
     setAuthToken(localStorage.token);
 }
 
-console.log ("Appjs"+ localStorage.token);
-
 const App = ()=> {
 /* use Effect fica executando o metodo do store.dispatch em loop a não ser que se use um [] como segundo parâmetro */
   useEffect(()=>{
