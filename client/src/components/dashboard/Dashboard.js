@@ -26,6 +26,7 @@ const Dashboard = ({getCurrentProfile,deleteAccount,auth:{ user },profile:{profi
     e somente uma vez - temos que usar o [], para executar somente uma vez */
      useEffect(()=>{
           getCurrentProfile();
+          console.log("Executou");
      },[getCurrentProfile]);
     return (
              loading && profile === null ? <Spinner /> : <Fragment>
